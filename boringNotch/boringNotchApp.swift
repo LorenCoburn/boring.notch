@@ -194,15 +194,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let uuid = screen.displayUUID else { return }
         
         let screenFrame = screen.frame
-        let notchHeight = openNotchSize.height
+        /// deleted this line ---- let notchHeight = openNotchSize.height
         let notchWidth = openNotchSize.width
+        
+        let triggerHeight: CGFloat = 40.0
+        
+        
         
         // Create notch region at the top-center of the screen where an open notch would occupy
         let notchRegion = CGRect(
             x: screenFrame.midX - notchWidth / 2,
-            y: screenFrame.maxY - notchHeight,
+            y: screenFrame.maxY - triggerHeight,
             width: notchWidth,
-            height: notchHeight
+            height: triggerHeight
         )
         
         let detector = DragDetector(notchRegion: notchRegion)
