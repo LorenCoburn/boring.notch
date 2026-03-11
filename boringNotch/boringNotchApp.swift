@@ -190,18 +190,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+
     private func setupDragDetectorForScreen(_ screen: NSScreen) {
         guard let uuid = screen.displayUUID else { return }
         
         let screenFrame = screen.frame
-        /// deleted this line ---- let notchHeight = openNotchSize.height
         let notchWidth = openNotchSize.width
         
-        let triggerHeight: CGFloat = 40.0
+        // Use the system's actual notch height.
+        // We add 2.0 just to ensure the mouse is definitely "inside" the detection zone.
+        let systemNotchHeight = screen.safeAreaInsets.top
+        let triggerHeight: CGFloat = systemNotchHeight > 0 ? systemNotchHeight + 2.0 : 40.0
         
-        
-        
-        // Create notch region at the top-center of the screen where an open notch would occupy
         let notchRegion = CGRect(
             x: screenFrame.midX - notchWidth / 2,
             y: screenFrame.maxY - triggerHeight,
@@ -220,7 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         dragDetectors[uuid] = detector
         detector.startMonitoring()
     }
-
+    
     private func handleDragEntersNotchRegion(onScreen screen: NSScreen) {
         guard let uuid = screen.displayUUID else { return }
         
